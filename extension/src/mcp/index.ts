@@ -5,6 +5,7 @@ import { configureWindsurfMCP } from './mcp-windsurf-config';
 import { WindsurfMCPHealthMonitor } from './windsurf-mcp-health-monitor';
 import { configurePearAIMCP } from './mcp-pearai-config';
 import { configureTraeMCP } from './mcp-trae-config';
+import { configureAntigravityMCP } from './mcp-antigravity-config';
 
 /**
  * Main entry point for multi-editor MCP setup
@@ -60,6 +61,12 @@ export async function setupMCP(context: vscode.ExtensionContext): Promise<void> 
             case 'trae':
                 // Trae uses config file (reload needed)
                 success = await configureTraeMCP(context);
+                needsReload = true;
+                break;
+                
+            case 'antigravity':
+                // Antigravity uses config file (reload needed)
+                success = await configureAntigravityMCP(context);
                 needsReload = true;
                 break;
                 
@@ -141,4 +148,3 @@ export async function restartWindsurfMCP(): Promise<boolean> {
 // Export for backward compatibility and direct use
 export { registerMCPServerWithCursorAPI, unregisterMCPServer } from './mcp-cursor-api';
 export { WindsurfMCPHealthMonitor } from './windsurf-mcp-health-monitor';
-

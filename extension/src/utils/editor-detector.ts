@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 /**
  * Supported AI code editors with MCP integration
  */
-export type SupportedEditor = 'cursor' | 'windsurf' | 'pearai' | 'trae' | 'unknown';
+export type SupportedEditor = 'cursor' | 'windsurf' | 'pearai' | 'trae' | 'antigravity' | 'unknown';
 
 /**
  * Detect which AI code editor is currently running
@@ -45,6 +45,11 @@ export function detectEditor(): SupportedEditor {
         if (execPath.includes('cursor')) {
             console.log('[Auxly Editor Detection] ✅ Detected: Cursor (via execPath)');
             return 'cursor';
+        }
+        
+        if (execPath.includes('antigravity') || execPath.includes('gemini')) {
+            console.log('[Auxly Editor Detection] ✅ Detected: Antigravity (via execPath)');
+            return 'antigravity';
         }
         
         // Method 2: Check for Cursor-specific API (most reliable for Cursor)
@@ -90,6 +95,11 @@ export function detectEditor(): SupportedEditor {
             return 'trae';
         }
         
+        if (process.env.ANTIGRAVITY_IDE || process.env.GEMINI_IDE) {
+            console.log('[Auxly Editor Detection] ✅ Detected: Antigravity (via env var)');
+            return 'antigravity';
+        }
+        
         // No match found
         console.log('[Auxly Editor Detection] ⚠️ Unknown editor detected');
         console.log('[Auxly Editor Detection] Version string:', vscode.version);
@@ -113,6 +123,9 @@ export function detectEditor(): SupportedEditor {
  * 
  * @param editor The editor type
  * @returns Human-readable editor name
+ * 
+ *  * @param editor The editor type
+ * @returns Human-readable editor name
  */
 export function getEditorDisplayName(editor: SupportedEditor): string {
     switch (editor) {
@@ -124,6 +137,8 @@ export function getEditorDisplayName(editor: SupportedEditor): string {
             return 'PearAI';
         case 'trae':
             return 'Trae';
+        case 'antigravity':
+            return 'Antigravity (Google)';
         case 'unknown':
             return 'Unknown Editor';
         default:
@@ -141,4 +156,3 @@ export function editorSupportsMCP(editor: SupportedEditor): boolean {
     // All known editors support MCP
     return editor !== 'unknown';
 }
-
